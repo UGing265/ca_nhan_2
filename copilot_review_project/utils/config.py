@@ -2,6 +2,8 @@
 
 import os
 from dotenv import load_dotenv
+# Initialize client
+from google import genai
 
 # Load environment variables from .env file
 load_dotenv()
@@ -22,14 +24,10 @@ class Config:
     REPAIR_TEMPERATURE = 0.2  # Low temperature to ensure accuracy
 
     # Streamlit configuration
-    APP_TITLE = "AI Code Review and Repair Agent"
-
+    APP_TITLE = "Multi-Language AI Code Review and Repair Agent"
 
 # Check the API key
 if not Config.GEMINI_API_KEY:
     print("WARNING: GEMINI_API_KEY is not set in environment variables.")
-
-# Initialize client
-from google import genai
 
 GEMINI_CLIENT = genai.Client(api_key=Config.GEMINI_API_KEY)
