@@ -1,5 +1,3 @@
-# (Team-wide) Example Python code file for testing the review system.
-# Contains intentional issues to trigger review comments.
 
 def calculate_total(items):
     # Missing docstring - policy violation
