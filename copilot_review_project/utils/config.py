@@ -1,10 +1,24 @@
 # /utils/config.py
 
 import os
-from dotenv import load_dotenv
+from pathlib import Path
+from dotenv import load_dotenv, find_dotenv
 
-# Load environment variables from .env file
-load_dotenv()
+# Load environment variables from .env file.
+# Resolve .env relative to the project root (two levels up from this file) so
+# loading works regardless of the current working directory when the app
+# is started. Fallback to find_dotenv() and then to default behavior.
+env_path = Path(__file__).resolve().parent.parent / ".env"
+if env_path.exists():
+    load_dotenv(env_path)
+else:
+    # try to find a .env somewhere up the path
+    found = find_dotenv()
+    if found:
+        load_dotenv(found)
+    else:
+        # last resort: use default loader (will search cwd and parents)
+        load_dotenv()
 
 
 class Config:

@@ -11,8 +11,8 @@ class RepairAgent:
         self.client = GEMINI_CLIENT
         self.model = Config.REPAIR_MODEL
 
-    def repair(self, original_code: str, issue_description: str) -> str | None:
-        prompt = generate_repair_prompt(original_code, issue_description)
+    def repair(self, original_code: str, issue_description: str, language: str) -> str | None:
+        prompt = generate_repair_prompt(original_code, issue_description, language)
 
         try:
             response = self.client.models.generate_content(
@@ -24,8 +24,8 @@ class RepairAgent:
                 )
             )
 
-            # Extract Python code block
-            code_block_match = re.search(r"```python\n(.*?)\n```", response.text, re.DOTALL)
+            # Extract code block
+            code_block_match = re.search(rf"```{language}\n(.*?)\n```", response.text, re.DOTALL)
 
             if code_block_match:
                 return code_block_match.group(1).strip()

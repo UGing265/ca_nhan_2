@@ -11,9 +11,9 @@ class ReviewAgent:
         self.client = GEMINI_CLIENT
         self.model = Config.REVIEW_MODEL
 
-    def review(self, code_snippet: str) -> list:
+    def review(self, code_snippet: str, language: str) -> list:
         """Perform source code review and return JSON results."""
-        prompt = generate_review_prompt(code_snippet)
+        prompt = generate_review_prompt(code_snippet, language)
 
         try:
             response = self.client.models.generate_content(
