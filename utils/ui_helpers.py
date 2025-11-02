@@ -12,6 +12,10 @@ def display_review_results(results):
 
     st.subheader("🟢 Review Results:")
     for i, result in enumerate(results):
+        with st.expander(f"Issue {i + 1}: {result['severity']} - {result['issue_type']}"):
+            st.code(result['context'], language='python')
+            st.write(f"**Line:** {result['line']}")
+            st.markdown(f"**Description:** {result['description']}")
         with st.expander(f"Issue {i + 1}: {result.get('severity', 'N/A')} - {result.get('issue_type', 'General')} (Line {result.get('line', 'N/A')})"):
             st.code(result.get('context', 'No context provided'), language='python')
             st.markdown(f"**Description:** {result.get('description', 'No description.')}")
