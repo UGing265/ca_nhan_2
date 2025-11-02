@@ -1,0 +1,20 @@
+# (Team-wide) Specifies files/folders to exclude from version control
+.env
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.streamlit/secrets.toml
+.venv/
+venv/
+.DS_Store
+.vscode/
+.idea/
+llms.txt
+llms-full.txt

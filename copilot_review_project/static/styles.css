@@ -1,0 +1,20 @@
+/* (Role: Frontend Lead) Custom CSS for styling the Streamlit app to achieve a "VSCode-like" appearance */
+/* Dark theme, Monaco editor styling, button styles */
+
+.stApp {
+    background-color: #1E1E1E;
+    color: #CCCCCC;
+}
+
+.stButton>button {
+    background-color: #007ACC;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 16px;
+    font-weight: 500;
+}
+
+.stButton>button:hover {
+    background-color: #005A9E;
+}
