@@ -1,5 +1,4 @@
-# streamlit_app.py
-
+# \ca_nhan_2\streamlit_app.py
 import streamlit as st
 from pygments.lexers import guess_lexer
 from pygments.util import ClassNotFound
@@ -8,8 +7,8 @@ from utils.session_manager import initialize_session_state, get_session_data, se
 from utils.ui_helpers import display_review_results, display_code_diff, render_chat_history_sidebar
 from utils.history_manager import init_history, add_to_history
 from agents.workflow import run_code_review_workflow
+import io
 
-# Initialize session state
 initialize_session_state()
 init_history()
 
@@ -70,9 +69,8 @@ if st.button("🚀 Run Review & Repair"):
             # Auto-detect logic
             if language_to_use=="Auto-detect":
                 try:
-                    lexer = guess_lexer(code_input)
-                    language_to_use = lexer.aliases[0]
-                    st.info(f"Detected language: {language_to_use}")
+                    final_language = guess_lexer(code_input_paste).aliases[0]
+                    st.info(f"Detected language: {final_language}")
                 except ClassNotFound:
                     language_to_use = "python"
                     st.warning("Could not auto-detect language. Falling back to Python. Please select the language manually for better results.")
@@ -95,25 +93,22 @@ st.header("Result")
 
 review_results = get_session_data('review_results')
 repaired_code = get_session_data('repaired_code')
-final_language = get_session_data('final_language') or get_session_data('selected_language') or 'text'
+final_language = get_session_data('final_language') or 'text'
+current_code_for_display = get_session_data('current_code_for_display')
 
-# If no review run yet, guide the user
 if review_results is None:
     st.info("No review has been run yet. Paste your code above/upload a file and click 'Run Review & Repair'.")
 else:
-    # If there are findings, display them
     if review_results:
+        # Case 1: ERRORS FOUND
         display_review_results(review_results)
+        # Display the fix if available
+        if repaired_code:
+            display_code_diff(current_code_for_display, repaired_code)
+        else:
+            st.warning("⚠️ Issues were found, but the Repair Agent could not generate a fix.")
     else:
-        # Announce success when there are no issues
-        st.success("✅ No issues found. The code looks correct.")
-        st.subheader("Original Code:")
-        st.code(code_input or get_session_data('code_input') or "", language=final_language)
-
-    # If repair produced a result, show the diff and final code
-    if repaired_code:
-        display_code_diff(code_input, repaired_code)
-
-        # Show last repaired code
-        st.subheader("The code has been completely repaired:")
-        st.code(repaired_code, language=final_language)
+        # Case 2: NO ERRORS FOUND
+        st.success("🎉 Your code passed the review. **No issues found!**")
+        st.subheader("✔️ Original Code:")
+        st.code(current_code_for_display, language=final_language)

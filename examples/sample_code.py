@@ -1,3 +1,4 @@
+# ca_nhan_2\examples\sample_code.py
 
 def calculate_total(items):
     # Missing docstring - policy violation
