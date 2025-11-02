@@ -16,3 +16,7 @@ build/
 .idea/
 llms.txt
 llms-full.txt
+
+# Data folder (history files)
+data/
+*.json

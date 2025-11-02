@@ -4,82 +4,74 @@ from pygments.lexers import guess_lexer
 from pygments.util import ClassNotFound
 from utils.config import Config
 from utils.session_manager import initialize_session_state, get_session_data, set_session_data
-from utils.ui_helpers import display_review_results, display_code_diff
+from utils.ui_helpers import display_review_results, display_code_diff, render_chat_history_sidebar
+from utils.history_manager import init_history, add_to_history
 from agents.workflow import run_code_review_workflow
 import io
 
 initialize_session_state()
+init_history()
+
 st.set_page_config(page_title=Config.APP_TITLE, layout="wide")
-st.header("🔍 Code Review & Repair Agent")
-st.markdown("AI-powered code analysis and automatic bug fixing")
-st.image("static/fighting_chicks.jpg", width=100)
-st.subheader("1. Input Source Code")
 
-input_tabs = st.tabs(["📝 Paste Code", "📤 Upload File"])
+st.title(Config.APP_TITLE)
+# st.image("static/logo.png", width=100)
 
-# TAB 1: PASTE CODE
-with input_tabs[0]:
-    language_paste = st.selectbox(
-        "Select Language:",
-        ["python", "javascript", "typescript", "java", "c++", "csharp", "go", "rust", "Auto-detect"],
-        key="language_paste_select",
-        index=0,
-        help="Choose the programming language of your code"
-    )
-    code_input_paste = st.text_area(
-        "Paste your code here:",
-        height=300,
-        key="code_paste_area"
-    )
-    if st.button("🚀 Analyze Pasted Code", key='run_paste', use_container_width=True):
-        if not code_input_paste.strip():
-            st.error("❌ Please paste some code first!")
-        else:
-            final_language = language_paste
-            if final_language=="Auto-detect":
+# Render history sidebar
+render_chat_history_sidebar()
+
+# --- Input Section ---
+st.header("1.Enter Source Code")
+
+# Language selection
+supported_languages = ["Auto-detect", "python", "javascript", "java", "csharp", "cpp", "go", "ruby", "typescript", "php", "swift"]
+# Ensure 'selected_language' is initialized in session state
+if 'selected_language' not in st.session_state:
+    st.session_state['selected_language'] = 'Auto-detect'
+
+# Choose language:
+selected_language_option = st.selectbox(
+    "Select the programming language:",
+    options=supported_languages,
+    index=supported_languages.index(get_session_data('selected_language')) # Default to Auto-detect
+)
+set_session_data('selected_language', selected_language_option)
+
+st.header("1. Enter Source Code")
+
+code_input = st.text_area(
+    f"Paste the code to be reviewed here:",
+    height=300,
+    value=get_session_data('code_input')
+)
+set_session_data('code_input', code_input)
+
+if st.button("🚀 Run Review & Repair"):
+    if not code_input.strip():
+        st.error("Please enter the source code to run the review.")
+    else:
+        with st.spinner("Running Review Agent and Repair Agent..."):
+            language_to_use = selected_language_option
+            if language_to_use == "Auto-detect":
                 try:
                     final_language = guess_lexer(code_input_paste).aliases[0]
                     st.info(f"Detected language: {final_language}")
                 except ClassNotFound:
-                    final_language = 'python'
-                    st.warning("Could not auto-detect language. Falling back to Python.")
-            with st.spinner(f"🔍 Analyzing {final_language} code..."):
-                review_results, repaired_code = run_code_review_workflow(code_input_paste, final_language)
-                set_session_data('review_results', review_results)
-                set_session_data('repaired_code', repaired_code)
-                set_session_data('final_language', final_language)
-                set_session_data('current_code_for_display', code_input_paste)
+                    language_to_use = "python" # fallback to python
+                    st.warning("Could not auto-detect language. Falling back to Python. Please select the language manually for better results.")
 
-# TAB 2: UPLOAD FILE
-with input_tabs[1]:
-    uploaded_file = st.file_uploader(
-        "Upload a code file (e.g., .py, .js, .java) 📁",
-        type=["py", "js", "ts", "java", "cpp", "cs", "go", "rs"],
-        key="file_uploader_widget"
-    )
-    if uploaded_file is not None:
-        file_content = uploaded_file.read().decode("utf-8")
-        file_ext = uploaded_file.name.split('.')[-1].lower()
-        ext_to_lang = {
-            'py': 'python', 'js': 'javascript', 'ts': 'typescript',
-            'java': 'java', 'cpp': 'c++', 'cs': 'csharp', 'go': 'go', 'rs': 'rust'
-        }
-        detected_language = ext_to_lang.get(file_ext, 'text')
-        st.info(f"📄 File loaded: `{uploaded_file.name}` (Language: {detected_language})")
-        st.code(file_content, language=detected_language, line_numbers=True)
-        if st.button("🚀 Analyze Uploaded File", key='run_file', use_container_width=True):
-            with st.spinner(f"🔍 Analyzing {detected_language} code..."):
-                review_results, repaired_code = run_code_review_workflow(file_content, detected_language)
-                set_session_data('review_results', review_results)
-                set_session_data('repaired_code', repaired_code)
-                set_session_data('final_language', detected_language)
-                set_session_data('current_code_for_display', file_content)
-    else:
-        st.markdown("""
-        <p style='text-align: center; color: gray; margin-top: 2rem;'>
-        Drag & Drop or Click to upload your code file for analysis.
-        </p>
-        """, unsafe_allow_html=True)
+            # Run the entire stream
+            review_results, repaired_code = run_code_review_workflow(code_input, language_to_use)
+
+            # Update session state
+            set_session_data('review_results', review_results)
+            set_session_data('repaired_code', repaired_code)
+            set_session_data('final_language', language_to_use)
+            
+            # Add to history
+            add_to_history(code_input, review_results, repaired_code)
+            
+            st.success("✅ Review completed and saved to history!")
 
 st.markdown("---")
 st.subheader("2. Analysis Results")
