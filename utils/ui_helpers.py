@@ -13,8 +13,8 @@ def display_review_results(results):
     for i, result in enumerate(results):
         with st.expander(f"Issue {i + 1}: {result['severity']} - {result['issue_type']}"):
             st.code(result['context'], language='python')
-            st.write(f"**Dòng:** {result['line']}")
-            st.markdown(f"**Mô tả:** {result['description']}")
+            st.write(f"**Line:** {result['line']}")
+            st.markdown(f"**Description:** {result['description']}")
 
 
 def display_code_diff(original_code, repaired_code):
