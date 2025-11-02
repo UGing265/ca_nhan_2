@@ -3,13 +3,15 @@
 import streamlit as st
 
 def initialize_session_state():
-    """Initialize Streamlit state variables if they do not exist."""
+    """Initializes Streamlit session state variables."""
     if 'code_input' not in st.session_state:
         st.session_state['code_input'] = ""
     if 'review_results' not in st.session_state:
         st.session_state['review_results'] = []
     if 'repaired_code' not in st.session_state:
         st.session_state['repaired_code'] = None
+    if 'selected_language' not in st.session_state:
+        st.session_state['selected_language'] = "python"
 
 def get_session_data(key):
     """Get data from session state."""
