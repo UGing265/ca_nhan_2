@@ -1,4 +1,4 @@
-# 🦾 SEAL Hackathon Fall 2025 – Team ca_nhan_2 (TheWings)
+# 🦾 SEAL Hackathon Fall 2025 – Team ca_nhan_2 (TheWingers)
 
 ## 🎯 Giới thiệu
 
@@ -14,11 +14,12 @@ Mục tiêu: Tạo ra ứng dụng AI hỗ trợ một hoặc nhiều giai đo�
 
 | Mục                   | Thông tin                                                               |
 | --------------------- | ----------------------------------------------------------------------- |
-| **Tên đội**           | ca_nhan_2 *(TheWings)*                                                  |
-| **Thành viên**        | 3–5 sinh viên                                                           |
+| **Tên đội**           | ca_nhan_2 *(TheWingers)*                                                  |
+| **Thành viên**        | 5 sinh viên                                                           |
 | **Track thi đấu**     | Track 2 – *Code Generation & Review App*                                |
 | **Chủ đề**            | AI Reviewer – Multi-Agent System for Code Generation & Review           |
-| **Công nghệ sử dụng** | Google ADK (Python), Gemini 2.5 Pro, Streamlit, FastAPI, GitHub Actions |
+| **Công nghệ sử dụng** | Google ADK (Python), Gemini 2.5 Pro, Streamlit                 |
+
 
 ---
 
@@ -28,8 +29,7 @@ Mục tiêu: Tạo ra ứng dụng AI hỗ trợ một hoặc nhiều giai đo�
 | -------------------------- | ---------------------------------------------------------------------------- |
 | **Backend (FastAPI)**      | Nhận webhook GitHub, xử lý dữ liệu Pull Request và gọi Gemini 2.5 Pro.       |
 | **AI Agents**              | Reviewer, Generator, Tester phối hợp trong vòng lặp review & cải thiện code. |
-| **Frontend (Streamlit)**   | Dashboard hiển thị quá trình review và kết quả.                              |
-| **CI/CD (GitHub Actions)** | Tự động chạy review khi có PR mới.                                           |
+| **Frontend (Streamlit)**   | Dashboard hiển thị quá trình review và kết quả. |
 | **Config (policy.yaml)**   | Bộ luật và tiêu chuẩn đánh giá code (style, security, readability...).       |
 
 ---
@@ -45,15 +45,7 @@ Mục tiêu: Tạo ra ứng dụng AI hỗ trợ một hoặc nhiều giai đo�
 
 ---
 
-## 👥 Thành viên đội (dự kiến)
-
-| Tên          | Vai trò      | Nhiệm vụ                                      |
-| ------------ | ------------ | --------------------------------------------- |
-| Thành viên 1 | Team Leader  | Quản lý repo, CI/CD, phối hợp các module      |
-| Thành viên 2 | AI Engineer  | Xây dựng multi-agent flow với Google ADK      |
-| Thành viên 3 | Backend Dev  | Phát triển FastAPI webhook & xử lý dữ liệu PR |
-| Thành viên 4 | Frontend Dev | Thiết kế và phát triển Streamlit Dashboard    |
-| Thành viên 5 | Presenter    | Chuẩn bị slide và trình bày demo              |
+## 👥 Thành viên đội 
 
 ---
 
@@ -74,7 +66,6 @@ Mục tiêu: Tạo ra ứng dụng AI hỗ trợ một hoặc nhiều giai đo�
 
 ---
 
-## 📫 Ghi chú
-
+## 📫 Chú thích
 * **Trường:** FPT University HCM
 * **Cuộc thi:** SEAL Hackathon Fall 2025
