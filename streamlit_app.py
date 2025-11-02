@@ -3,6 +3,7 @@ import os
 
 import streamlit as st
 from agents.workflow import run_code_review_workflow
+import io
 
 # ---------------------- CẤU HÌNH CHUNG ----------------------
 st.set_page_config(page_title="Code Viewer", layout="wide")

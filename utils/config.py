@@ -1,4 +1,4 @@
-# /utils/config.py
+# \ca_nhan_2\utils\config.py
 
 import os
 from dotenv import load_dotenv
