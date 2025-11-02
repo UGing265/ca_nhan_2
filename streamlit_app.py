@@ -17,8 +17,22 @@ st.title(Config.APP_TITLE)
 # --- Input Section ---
 st.header("1.Enter Source Code")
 
+# Language selection
+supported_languages = ["python", "javascript", "java", "csharp", "cpp", "go", "ruby", "typescript", "php", "swift"]
+# Ensure 'selected_language' is initialized in session state
+if 'selected_language' not in st.session_state:
+    st.session_state['selected_language'] = 'python'
+
+selected_language = st.selectbox(
+    "Select the programming language:",
+    options=supported_languages,
+    index=supported_languages.index(get_session_data('selected_language')) # Default to Python
+)
+set_session_data('selected_language', selected_language)
+
+
 code_input = st.text_area(
-    "Paste the Python code to be reviewed here:",
+    f"Paste the {selected_language} code to be reviewed here:",
     height=300,
     value=get_session_data('code_input')
 )
@@ -30,7 +44,7 @@ if st.button("🚀 Run Review & Repair"):
     else:
         with st.spinner("Running Review Agent and Repair Agent..."):
             # Run the entire stream
-            review_results, repaired_code = run_code_review_workflow(code_input)
+            review_results, repaired_code = run_code_review_workflow(code_input, selected_language)
 
             # Update session state
             set_session_data('review_results', review_results)
@@ -50,4 +64,4 @@ if repaired_code:
 
     # Show last repaired code
     st.subheader("The code has been completely repaired.:")
-    st.code(repaired_code, language='python')
+    st.code(repaired_code, language=selected_language)

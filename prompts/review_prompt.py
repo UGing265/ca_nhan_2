@@ -1,7 +1,7 @@
 # /prompts/review_prompt.py
 
 SYSTEM_INSTRUCTION_REVIEW = """
-You are a professional AI Code Reviewer. Your task is to analyze the provided Python code and point out issues with errors, performance, security, and style.
+You are a professional AI Code Reviewer. Your task is to analyze the provided source code and point out issues with errors, performance, security, and style.
 
 Output requirements:
 1. Analyze each issue one by one.
@@ -9,10 +9,10 @@ Output requirements:
 """
 
 
-def generate_review_prompt(code_snippet: str) -> str:
+def generate_review_prompt(code_snippet: str, language: str = "code") -> str:
     """Create specific prompts for code review."""
     return f"""
-    Please review the following Python code. Please focus on finding logical errors, security issues (if any), and performance optimization opportunities.
+    Please review the following {language} code. Please focus on finding logical errors, security issues (if any), and performance optimization opportunities.
 
     Source code:
     ---
