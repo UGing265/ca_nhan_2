@@ -11,8 +11,6 @@ __pycache__/
 dist/
 build/
 .streamlit/secrets.toml
-.venv/
-venv/
 .DS_Store
 .vscode/
 .idea/
