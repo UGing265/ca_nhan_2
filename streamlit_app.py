@@ -5,16 +5,21 @@ from pygments.lexers import guess_lexer
 from pygments.util import ClassNotFound
 from utils.config import Config
 from utils.session_manager import initialize_session_state, get_session_data, set_session_data
-from utils.ui_helpers import display_review_results, display_code_diff
+from utils.ui_helpers import display_review_results, display_code_diff, render_chat_history_sidebar
+from utils.history_manager import init_history, add_to_history
 from agents.workflow import run_code_review_workflow
 
 # Initialize session state
 initialize_session_state()
+init_history()
 
-st.set_page_config(page_title=Config.APP_TITLE)
+st.set_page_config(page_title=Config.APP_TITLE, layout="wide")
 
 st.title(Config.APP_TITLE)
 # st.image("static/logo.png", width=100)
+
+# Render history sidebar
+render_chat_history_sidebar()
 
 # --- Input Section ---
 st.header("1.Enter Source Code")
@@ -33,6 +38,7 @@ selected_language_option = st.selectbox(
 )
 set_session_data('selected_language', selected_language_option)
 
+st.header("1. Enter Source Code")
 
 code_input = st.text_area(
     f"Paste the code to be reviewed here:",
@@ -63,6 +69,11 @@ if st.button("🚀 Run Review & Repair"):
             set_session_data('review_results', review_results)
             set_session_data('repaired_code', repaired_code)
             set_session_data('final_language', language_to_use)
+            
+            # Add to history
+            add_to_history(code_input, review_results, repaired_code)
+            
+            st.success("✅ Review completed and saved to history!")
 
 # --- Output Section ---
 st.header("2. Result")
